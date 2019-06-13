@@ -1,0 +1,24 @@
+module AdditionApp
+{
+
+
+    
+  interface Addition
+  {
+ 
+    oneway void shutdown();
+    
+    string sayHello();
+    string sayHello2();
+    
+   
+    boolean addEvent(in string managerID,in string eventID,in string eventType,in long bookingCapacity);
+    boolean removeEvent (in string ID,in string eventID,in string eventType);
+    string listEventAvailability(in string managerID,in string eventType) ;
+    
+    long bookEvent(in string customerID,in string eventID,in string eventType);
+    boolean cancelEvent (in string eventID,in string eventType,in string customerID);
+    string  getBookingSchedule (in string customerID);
+    
+    };
+};
