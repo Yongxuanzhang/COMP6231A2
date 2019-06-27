@@ -25,11 +25,11 @@ public class ClientUI{
     
     private void userInfoStart() {
       //User data in client side.
-      userInfo.put("MTLM2345", "123");
+      userInfo.put("TORM6785", "123");
       userInfo.put("MTLC2345", "123");
-      userInfo.put("TORM2345", "123");
-      userInfo.put("OTWM2345", "123");
-      userInfo.put("OTWC2345", "123");
+      userInfo.put("TORC1234", "123");
+      userInfo.put("MTLM9087", "123");
+      userInfo.put("OTWM4560", "123");
     }
 
   

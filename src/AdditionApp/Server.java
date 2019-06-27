@@ -641,12 +641,13 @@ public class Server extends AdditionPOA{
   public int checkCounts(String customerID,String eventID) {
     
     LinkedList<String> userRecords = userSchedule.get(customerID);
-    String month =  eventID.substring(4, 6);
+    String month =  eventID.substring(6, 8);
     System.out.println("Month is"+month);
     int count = 0;
     if(userRecords!=null) {
+    	  System.out.println("userRecords is"+userRecords);
       for(String o:userRecords) {
-        String[] temp=o.split("_");
+        String[] temp=o.split(" ");
         System.out.println("Month of temp is"+temp[1]);
         if(month.equals(temp[1].substring(6, 8))) {
         	//MTLE100519
@@ -711,6 +712,7 @@ public class Server extends AdditionPOA{
             return -1;
         }
     
+
 		if(!eventID.substring(0, 3).equals(location)) {
 			
 
@@ -748,9 +750,13 @@ public class Server extends AdditionPOA{
 		String eventLoc= eventID.substring(0, 3);
 		
 
-		if(!record.get(eventType).containsKey(eventID))return -5;
-		int checkTimes=0;
+		if(!record.get(eventType).containsKey(eventID)) {
+			sendBack(-5);
+			return -5;
+		}
+	
 		
+    	int checkTimes=0;
 		if(userSchedule.get(customerID)!=null) {
 		for(String o:userSchedule.get(customerID)) {
 			checkTimes++;
