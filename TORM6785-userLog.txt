@@ -1,0 +1,12 @@
+Jun 27, 2019 4:25:19 PM AdditionApp.ClientUI operateM
+INFO: TORC1234 canceled OTWA100617 successfully.
+Jun 27, 2019 4:26:03 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 get the infomation of TradeShows
+Jun 27, 2019 4:26:22 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 cannot remove TORA100519
+Jun 27, 2019 4:26:31 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 removed TORA100519 successfully.
+Jun 27, 2019 4:26:39 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 get the infomation of TradeShows
+Jun 27, 2019 4:26:53 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 cannot remove MTLA100617
