@@ -1118,6 +1118,32 @@ public class Server extends AdditionPOA{
 			}
 
 	}
+
+	
+	
+	@Override
+	public boolean swapEvent(String customerID, String newEventID, String newEventType, String oldEventID,
+			String oldEventType) {
+		// TODO Auto-generated method stub
+		
+
+		//System.out.println("before swap");
+		
+		if(this.bookEvent(customerID, newEventID, newEventType)==1) {
+		//	System.out.println("after book in swap");
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.cancelEvent(oldEventID, oldEventType, customerID);
+			return true;
+		}
+		else return false;
+		
+		
+	}
 	
 	
 	

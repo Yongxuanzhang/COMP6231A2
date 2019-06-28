@@ -58,6 +58,7 @@ public class ClientUI{
       System.out.println("4. Add Event"); 
       System.out.println("5. Remove Event"); 
       System.out.println("6. List Event Availability"); 
+      System.out.println("7. Swap Event"); 
       System.out.println("E for Exit"); 
       System.out.println("**********************************"); 
       Scanner sc = new Scanner(System.in); 
@@ -72,6 +73,7 @@ public class ClientUI{
       System.out.println("1. Book Event"); 
       System.out.println("2. Get BookingSchedule"); 
       System.out.println("3. Cancel Event"); 
+      System.out.println("4. Swap Event"); 
       System.out.println("E for Exit"); 
       System.out.println("**********************************"); 
       Scanner sc = new Scanner(System.in); 
@@ -173,6 +175,29 @@ public class ClientUI{
 	          	 userLog.logger.info(customerID+" cannot cancel "+eventID);
 	          	 return false;
 	          }
+          case "4":
+          	  sct = new Scanner(System.in); 
+
+              System.out.println("Please Enter new Event ID:"); 
+              String newEventID = sct.nextLine(); 
+              System.out.println("Please Enter new Event Type:"); 
+              String newEventType = sct.nextLine(); 	  
+              System.out.println("Please Enter old Event ID:"); 
+              String oldEventID = sct.nextLine(); 
+              System.out.println("Please Enter old Event Type:"); 
+              String oldEventType = sct.nextLine(); 	
+              
+              if(stub.swapEvent(ID, newEventID, newEventType, oldEventID, oldEventType)) {
+                  System.out.println("Swapped successfully."); 
+                  userLog.logger.info(ID+" swapped "+oldEventID+" with "+newEventID+" successfully.");
+                  return true;
+              }else {
+              	 System.out.println("You cannot swap now."); 
+              	userLog.logger.info(ID+" cannot swap "+oldEventID);
+              	 return false;
+              }   
+	          
+	          
 
           case "E":
         	  opFlag=false;
@@ -341,6 +366,31 @@ public class ClientUI{
 	              }            	
 	              
 	            return true;
+	            
+          case "7":
+          	  sct = new Scanner(System.in); 
+        	  System.out.println("Please Enter Customer ID:");         	  
+	          customerID = sct.nextLine(); 
+              System.out.println("Please Enter new Event ID:"); 
+              String newEventID = sct.nextLine(); 
+              System.out.println("Please Enter new Event Type:"); 
+              String newEventType = sct.nextLine(); 	  
+              System.out.println("Please Enter old Event ID:"); 
+              String oldEventID = sct.nextLine(); 
+              System.out.println("Please Enter old Event Type:"); 
+              String oldEventType = sct.nextLine(); 	
+              
+              if(stub.swapEvent(customerID, newEventID, newEventType, oldEventID, oldEventType)) {
+                  System.out.println("Swapped successfully."); 
+                  userLog.logger.info(customerID+" swapped "+oldEventID+" with "+newEventID+" successfully.");
+                  return true;
+              }else {
+              	 System.out.println("You cannot swap now."); 
+              	userLog.logger.info(customerID+" cannot swap "+oldEventID);
+              	 return false;
+              }   
+	            
+	            
           case "E":
         	  opFlag=false;
         	  userLog.logger.info(ID+" exit the system. ");
