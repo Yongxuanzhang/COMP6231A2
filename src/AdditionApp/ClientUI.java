@@ -142,7 +142,8 @@ public class ClientUI{
 	              //System.out.println(stub.getBookingSchedule(customerID)); 
 	              userLog.logger.info(customerID+" got the schedule");
 	            
-	              System.out.println(userSchedule.substring(4, userSchedule.length())); 
+	              System.out.println(userSchedule); 
+	              //System.out.println(userSchedule.substring(4, userSchedule.length())); 
 	              /*
 	              for(String o:stub.getBookingSchedule(customerID)) {
 	            	     System.out.println(o); 

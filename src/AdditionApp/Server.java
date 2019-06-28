@@ -253,6 +253,71 @@ public class Server extends AdditionPOA{
                  
               }
              
+               if(info.substring(0, 6).equals("remove")) {
+                   System.out.println("UDPremove--"+info);        
+                   String[] bookInfo=info.split("-");
+                   //  String cancelInfo="remove-"+eventID+"-"+eventType+"-"+listenPort2+"-"+flag;
+                   sendbackport1=Integer.parseInt(bookInfo[4]);
+                   String eventID=bookInfo[1];
+              
+                    
+                     cancelOther=true;
+                  
+                 		if(userSchedule!=null) {
+                			for (Map.Entry<String,LinkedList<String>> entry : userSchedule.entrySet()) {
+                				
+                				if(userSchedule.get(entry.getKey())!=null) {
+                					 for(String o:userSchedule.get(entry.getKey())) {
+                					   System.out.println("userschedule"+o);
+                					   String[] comaperEvent=o.split(" ");
+                					   System.out.println("userschedule eventID"+comaperEvent[1]);
+                							if(eventID.equals(comaperEvent[1])) {
+                								userSchedule.get(entry.getKey()).remove(o);
+                							}
+                						 }
+
+                					}
+                				}
+                		}
+                     
+                   
+                   
+                }
+               
+               //***
+                if(info2.substring(0, 6).equals("remove")) {
+                  System.out.println("UDPcancel--"+info2);        
+                  String[] bookInfo=info2.split("-");
+                  //String cancelInfo="cancel-"+eventID+"-"+customerID+"-"+eventType+"-"+listenPort2;
+                  sendbackport1=Integer.parseInt(bookInfo[4]);
+                  String eventID=bookInfo[1];
+                 
+                    
+                    cancelOther=true;
+               
+                 		if(userSchedule!=null) {
+                			for (Map.Entry<String,LinkedList<String>> entry : userSchedule.entrySet()) {
+                				
+                				if(userSchedule.get(entry.getKey())!=null) {
+                					 for(String o:userSchedule.get(entry.getKey())) {
+                					   System.out.println("userschedule"+o);
+                					   String[] comaperEvent=o.split(" ");
+                					   System.out.println("userschedule eventID"+comaperEvent[1]);
+                							if(eventID.equals(comaperEvent[1])) {
+                								userSchedule.get(entry.getKey()).remove(o);
+                							}
+                						 }
+
+                					}
+                				}
+                		
+                    
+                   
+                  }
+                  
+               }
+               
+               
                  //feedback=Integer.parseInt(info); 
                //Change to UDP.
                //TODO:1.book event from other server(Modity stub).2.
@@ -335,6 +400,11 @@ public class Server extends AdditionPOA{
 		temp.put(eventID,record.get(eventType).get(eventID));	
 		record.get(eventType).remove(eventID, record.get(eventType).get(eventID));
 
+        sendRemoveRequest(eventID,eventType,requestPort1,"1");
+        sendRemoveRequest(eventID,eventType,requestPort2,"1");
+        sendRemoveRequest(eventID,eventType,requestPort1,"2");
+        sendRemoveRequest(eventID,eventType,requestPort2,"2");
+		
 		if(userSchedule!=null) {
 			for (Map.Entry<String,LinkedList<String>> entry : userSchedule.entrySet()) {
 				
@@ -367,7 +437,7 @@ public class Server extends AdditionPOA{
 	public String listEventAvailability(String managerID, String eventType) {
 
 		
-		if(!record.containsKey(eventType))return null;
+		if(!record.containsKey(eventType))return "    No such event";
 		
 		Thread t2 = new Thread(new Runnable(){	//running thread which will request data using UDP/sockets 
 			public void run(){
@@ -995,7 +1065,33 @@ public class Server extends AdditionPOA{
     
   }
 
+	private void sendRemoveRequest(String eventID,String eventType,int requestPort,String flag) {
+		      
+		     System.out.println("removerequest:");
 
+		           
+		           try {
+		               aSocket = new DatagramSocket();
+		               
+		               
+		               String cancelInfo="remove-"+eventID+"-"+eventType+"-"+listenPort2+"-"+flag;
+		               byte[] sData=cancelInfo.getBytes();
+		               
+		               System.out.println("send:"+cancelInfo);
+		               InetAddress address = InetAddress.getByName("localhost");
+		               //int port=8088;
+		               DatagramPacket sendPacket=new DatagramPacket(sData,sData.length,address,requestPort);
+		               //DatagramPacket sendPacket2=new DatagramPacket(sData,sData.length,address,targetPort2);
+		               aSocket.send(sendPacket);
+		               //aSocket.send(sendPacket2);
+		             
+		              // System.out.println(bf.toString());
+		               aSocket.close();
+		           } catch (Exception e) {         
+		               e.printStackTrace();
+		           }finally {if(aSocket != null) aSocket.close();}
+		    
+		  }
 	
 	@Override
 	public String getBookingSchedule(String customerID) {
@@ -1007,11 +1103,12 @@ public class Server extends AdditionPOA{
 	     e.printStackTrace();
 	   }
 			if(!userSchedule.containsKey(customerID)) {
-				return null;
+				String sc="    No schedule";
+				return sc;
 			}
 			
 			else {
-				String res=null;
+				String res="Schedule:";
 				for(String o: userSchedule.get(customerID)) {
 					res+=o;
 				}
