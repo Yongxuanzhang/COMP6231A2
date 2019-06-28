@@ -154,7 +154,9 @@ public class Server extends AdditionPOA{
               // socket2.receive(recevPacket2);
               // System.out.println("after receive in udpt");
                
-               
+               if (socket1!= null)socket1.close();
+   				
+              // socket1.close();
                byte[] d=recevPacket1.getData();
                int dlen = recevPacket1.getLength();
                String info = new String(d,0,dlen,"UTF-8");
@@ -262,7 +264,7 @@ public class Server extends AdditionPOA{
                 
                 e.printStackTrace();
             }finally {
-              socket1.close();
+              //socket1.close();
              // listenUDPt();
             }
             
@@ -367,7 +369,7 @@ public class Server extends AdditionPOA{
 		
 		if(!record.containsKey(eventType))return null;
 		
-		Thread t = new Thread(new Runnable(){	//running thread which will request data using UDP/sockets 
+		Thread t2 = new Thread(new Runnable(){	//running thread which will request data using UDP/sockets 
 			public void run(){
 				//while(true) {
 				try {
@@ -378,7 +380,7 @@ public class Server extends AdditionPOA{
 			}
 				//}
 		});
-		t.start();
+		t2.start();
 		
 
 		
@@ -608,14 +610,14 @@ public class Server extends AdditionPOA{
      
           try {
      
-              socket1 = new DatagramSocket(listenPort2);
+              socket2 = new DatagramSocket(listenPort2);
               
      
           
              byte[] data1= new byte[1000];    
              DatagramPacket recevPacket1 = new DatagramPacket(data1,data1.length);   
              System.out.println("before receive in udpfb");
-             socket1.receive(recevPacket1);
+             socket2.receive(recevPacket1);
              System.out.println("after receive in udpfb");
              
              
@@ -631,7 +633,7 @@ public class Server extends AdditionPOA{
               
               e.printStackTrace();
           }finally {
-            socket1.close();        
+            socket2.close();        
           }
           
           return feedback;
