@@ -187,7 +187,7 @@ public class ClientUI{
               System.out.println("Please Enter old Event Type:"); 
               String oldEventType = sct.nextLine(); 	
               
-              if(stub.swapEvent(ID, newEventID, newEventType, oldEventID, oldEventType)) {
+              if(stub.swapEvent(ID, newEventID, newEventType, oldEventID, oldEventType)==1) {
                   System.out.println("Swapped successfully."); 
                   userLog.logger.info(ID+" swapped "+oldEventID+" with "+newEventID+" successfully.");
                   return true;
@@ -380,7 +380,7 @@ public class ClientUI{
               System.out.println("Please Enter old Event Type:"); 
               String oldEventType = sct.nextLine(); 	
               
-              if(stub.swapEvent(customerID, newEventID, newEventType, oldEventID, oldEventType)) {
+              if(stub.swapEvent(customerID, newEventID, newEventType, oldEventID, oldEventType)==1) {
                   System.out.println("Swapped successfully."); 
                   userLog.logger.info(customerID+" swapped "+oldEventID+" with "+newEventID+" successfully.");
                   return true;

@@ -11,7 +11,7 @@ module AdditionApp
     string sayHello();
     string sayHello2();
     
-    boolean swapEvent(in string customerID,in string newEventID,in string newEventType,in string oldEventID,in string oldEventType); 
+    long swapEvent(in string customerID,in string newEventID,in string newEventType,in string oldEventID,in string oldEventType); 
    
     boolean addEvent(in string managerID,in string eventID,in string eventType,in long bookingCapacity);
     boolean removeEvent (in string ID,in string eventID,in string eventType);

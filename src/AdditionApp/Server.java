@@ -1122,26 +1122,34 @@ public class Server extends AdditionPOA{
 	
 	
 	@Override
-	public boolean swapEvent(String customerID, String newEventID, String newEventType, String oldEventID,
+	public synchronized int swapEvent(String customerID, String newEventID, String newEventType, String oldEventID,
 			String oldEventType) {
 		// TODO Auto-generated method stub
+		int res=-1;
+		String schedule=this.getBookingSchedule(customerID);
 		
+		String scheduleList[]= schedule.split(" ");
+		for(String s:scheduleList) {
+			if(s.equals(oldEventID))res=1;
+		}
 
 		//System.out.println("before swap");
+		//check if the user has booked this event;
 		
-		if(this.bookEvent(customerID, newEventID, newEventType)==1) {
-		//	System.out.println("after book in swap");
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if(res==1) {
+			if(this.bookEvent(customerID, newEventID, newEventType)==1) {
+			//	System.out.println("after book in swap");
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.cancelEvent(oldEventID, oldEventType, customerID);
+				return 1;
 			}
-			this.cancelEvent(oldEventID, oldEventType, customerID);
-			return true;
-		}
-		else return false;
-		
+			else return 0;
+		}else return -1;
 		
 	}
 	
