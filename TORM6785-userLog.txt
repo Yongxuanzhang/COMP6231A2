@@ -10,3 +10,9 @@ Jun 27, 2019 4:26:39 PM AdditionApp.ClientUI operateM
 INFO: TORM6785 get the infomation of TradeShows
 Jun 27, 2019 4:26:53 PM AdditionApp.ClientUI operateM
 INFO: TORM6785 cannot remove MTLA100617
+Jul 06, 2019 1:58:20 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 get the infomation of Conference
+Jul 06, 2019 1:58:42 PM AdditionApp.ClientUI operateM
+INFO: TORM6785 booked OTWA100619 for MTLC2345 successfully.
+Jul 06, 2019 1:58:54 PM AdditionApp.ClientUI operateM
+INFO: MTLC2345 got the schedule
