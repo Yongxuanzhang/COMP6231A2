@@ -1293,7 +1293,9 @@ public class Server extends AdditionPOA{
 			
 			this.cancelEvent(oldEventID, oldEventType, customerID);
 			
-			if(this.bookEvent(customerID, newEventID, newEventType)==1) {
+			int booknew=this.bookEvent(customerID, newEventID, newEventType);
+			
+			if(booknew==1) {
 			//	System.out.println("after book in swap");
 				try {
 					Thread.sleep(500);
@@ -1307,7 +1309,7 @@ public class Server extends AdditionPOA{
 			else {
 				this.bookEvent(customerID, oldEventID, oldEventType);
 				
-				return 0;
+				return booknew;
 			}
 		}else return -1;
 		

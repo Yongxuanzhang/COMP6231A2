@@ -187,11 +187,25 @@ public class ClientUI{
               System.out.println("Please Enter old Event Type:"); 
               String oldEventType = sct.nextLine(); 	
               
-              if(stub.swapEvent(ID, newEventID, newEventType, oldEventID, oldEventType)==1) {
+              int swapRes=stub.swapEvent(ID, newEventID, newEventType, oldEventID, oldEventType);
+              System.out.println("Swapped res."+swapRes); 
+              if(swapRes==1) {
                   System.out.println("Swapped successfully."); 
                   userLog.logger.info(ID+" swapped "+oldEventID+" with "+newEventID+" successfully.");
                   return true;
-              }else {
+              }
+              else if(swapRes==-3) {
+                  System.out.println(newEventID+" is full.");
+          		 userLog.logger.info(ID+" cannot swap "+oldEventID);
+          		 return false;
+              }
+              else if(swapRes==-1) {
+          		System.out.println(ID+" doesn't book "+oldEventID);
+          		 userLog.logger.info(ID+" cannot swap "+oldEventID);
+        		 return false;
+          	}
+           
+              else {
               	 System.out.println("You cannot swap now."); 
               	userLog.logger.info(ID+" cannot swap "+oldEventID);
               	 return false;
@@ -380,16 +394,29 @@ public class ClientUI{
               System.out.println("Please Enter old Event Type:"); 
               String oldEventType = sct.nextLine(); 	
               
-              if(stub.swapEvent(customerID, newEventID, newEventType, oldEventID, oldEventType)==1) {
+              
+              int swapRes=stub.swapEvent(customerID, newEventID, newEventType, oldEventID, oldEventType);
+              if(swapRes==1) {
                   System.out.println("Swapped successfully."); 
                   userLog.logger.info(customerID+" swapped "+oldEventID+" with "+newEventID+" successfully.");
                   return true;
-              }else {
-              	 System.out.println("You cannot swap now."); 
-              	userLog.logger.info(customerID+" cannot swap "+oldEventID);
-              	 return false;
-              }   
-	            
+              }
+              else if(swapRes==-3) {
+                  System.out.println(newEventID+" is full.");
+          		 userLog.logger.info(ID+" cannot swap "+oldEventID);
+          		 return false;
+              }
+              else if(swapRes==-1) {
+          		System.out.println(ID+" doesn't book "+oldEventID);
+          		 userLog.logger.info(ID+" cannot swap "+oldEventID);
+        		 return false;
+          	}
+	          else {
+	              	 System.out.println("You cannot swap now."); 
+	              	userLog.logger.info(customerID+" cannot swap "+oldEventID);
+	              	 return false;
+	              }   
+		            
 	            
           case "E":
         	  opFlag=false;

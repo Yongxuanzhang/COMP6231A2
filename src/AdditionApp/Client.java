@@ -136,10 +136,17 @@ public class Client extends Thread {
     	int res=stub.swapEvent(customerID, newEventID, newEventType, oldEventID, oldEventType);
     	if(res==1) {
     		 System.out.println(customerID+" has swapped "+oldEventID+" with "+newEventID+" successfully!");
+    		 userLog.logger.info(customerID+" has swapped "+oldEventID+ " successfully!");
     	}else if(res==-1) {
     		System.out.println(customerID+" doesn't book "+oldEventID);
-    	}else {
+    		 userLog.logger.info(customerID+" cannot swap "+oldEventID);
+    	}else if(res==-3) {
+    		System.out.println(newEventID+" is full.");
+    		 userLog.logger.info(customerID+" cannot swap "+oldEventID);
+    	}
+    	else {
     		System.out.println(customerID+" cannot swap "+oldEventID+" with "+newEventID);
+    		 userLog.logger.info(customerID+" cannot swap "+oldEventID);
     	}
     	
     }
@@ -154,20 +161,20 @@ public class Client extends Thread {
            // System.out.println(stub.listEventAvailability(ID,"Conference"));  
          
             callServerBookEvent(ID, "MTLA100619", "Conference");
-      
+            callSwap(ID,"MTLA100618","Seminars", "MTLA100619", "Conference");
               
-            stub.getBookingSchedule(ID);
+            String schedule=stub.getBookingSchedule(ID);
             
-            if(stub.getBookingSchedule(ID)!=null) {
+            if(schedule!=null) {
             	
-            	System.out.println(stub.getBookingSchedule(ID));
+            	System.out.println(ID+" "+schedule);
             	
             }
             } catch (Exception e) {
                 System.err.println("Client exception: " + e.toString());
                 e.printStackTrace();
             }
-        callSwap(ID,"MTLA100618","Seminars", "MTLA100619", "Conference");
+       // callSwap(ID,"MTLA100618","Seminars", "MTLA100619", "Conference");
     }
     
     
@@ -194,11 +201,11 @@ public class Client extends Thread {
         
         
           
-        stub.getBookingSchedule(ID);
+        //stub.getBookingSchedule(ID);
         
         if(stub.getBookingSchedule(ID)!=null) {
         	
-        	System.out.println(stub.getBookingSchedule(ID));
+        	//System.out.println(stub.getBookingSchedule(ID));
         	
         	/*
         	String[] schedule=stub.getBookingSchedule(ID).split(" ");
