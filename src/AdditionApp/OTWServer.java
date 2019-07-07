@@ -22,6 +22,9 @@ public static void main(String args[]) throws SecurityException, IOException {
 	value1.put("OTWA100619", 22);
 	value1.put("OTWA100618", 23);
 	value1.put("OTWA100617", 25);
+	value1.put("OTWA070619", 25);
+	value1.put("OTWA080619", 25);
+	value1.put("OTWA090619", 25);
 	value2.put("OTWM110419", 23);
 	value3.put("OTWE090519", 26);
 	OTWrecord.put("Conference", value1);

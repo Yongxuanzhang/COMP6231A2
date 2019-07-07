@@ -803,6 +803,7 @@ public class Server extends AdditionPOA{
     
     LinkedList<String> userRecords = userSchedule.get(customerID);
     String month =  eventID.substring(6, 8);
+    String year = eventID.substring(8, 10);
     System.out.println("Month is"+month);
     int count = 0;
     if(userRecords!=null) {
@@ -810,7 +811,7 @@ public class Server extends AdditionPOA{
       for(String o:userRecords) {
         String[] temp=o.split(" ");
         System.out.println("Month of temp is"+temp[1]);
-        if(month.equals(temp[1].substring(6, 8))) {
+        if(month.equals(temp[1].substring(6, 8))&&year.equals(temp[1].substring(8, 10))) {
         	//MTLE100519
           count++;
         }
@@ -1289,6 +1290,9 @@ public class Server extends AdditionPOA{
 		//check if the user has booked this event;
 		
 		if(res==1) {
+			
+			this.cancelEvent(oldEventID, oldEventType, customerID);
+			
 			if(this.bookEvent(customerID, newEventID, newEventType)==1) {
 			//	System.out.println("after book in swap");
 				try {
@@ -1297,10 +1301,14 @@ public class Server extends AdditionPOA{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				this.cancelEvent(oldEventID, oldEventType, customerID);
+				//this.cancelEvent(oldEventID, oldEventType, customerID);
 				return 1;
 			}
-			else return 0;
+			else {
+				this.bookEvent(customerID, oldEventID, oldEventType);
+				
+				return 0;
+			}
 		}else return -1;
 		
 	}
