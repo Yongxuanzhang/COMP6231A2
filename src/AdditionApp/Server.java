@@ -51,6 +51,8 @@ public class Server extends AdditionPOA{
 
 	private String[] receiveList1=null;
 	private String[] receiveList2=null;
+	private String recSchedule1;
+	private String recSchedule2;
 	//private boolean binded=false;
 	private int feedback=1;
 	private boolean fromThis=true;
@@ -183,6 +185,34 @@ public class Server extends AdditionPOA{
                this.sendData(info2, targetPort2);
                res=true;
              }
+               
+               if(info.substring(0, 8).equals("schedule")) {
+                         
+                   String[] bookInfo=info.split("-");
+                   // String cancelInfo="schedule-"+customerID+"-"+listenPort2+"-"+flag;
+                   sendbackport1=Integer.parseInt(bookInfo[2]);
+                   String cID=bookInfo[1];
+                  
+                   this.sendSchedule(this.getSchedule(cID), targetPort1);
+                   this.sendSchedule(this.getSchedule(cID), targetPort2);
+                   //this.cancelEvent(eventID, eventType, customerID)
+
+                   
+                }
+                if(info2.substring(0, 8).equals("schedule")) {
+                  
+                  String[] bookInfo=info2.split("-");
+                  // String cancelInfo="schedule-"+customerID+"-"+listenPort2+"-"+flag;
+                  sendbackport1=Integer.parseInt(bookInfo[2]);
+                  String cID=bookInfo[1];
+                  this.sendSchedule(this.getSchedule(cID), targetPort1);
+                  this.sendSchedule(this.getSchedule(cID), targetPort2);
+                  //this.cancelEvent(eventID, eventType, customerID)
+
+                  
+               }
+               
+               
                
                if(info.substring(0, 3).equals(location)) {
                  try {
@@ -451,9 +481,7 @@ public class Server extends AdditionPOA{
 				//}
 		});
 		t2.start();
-		
-
-		
+	
 		String res="";
 		
 		Map<String,Integer> temp=record.get(eventType);
@@ -461,7 +489,7 @@ public class Server extends AdditionPOA{
 		for (Map.Entry<String,Integer> entry : temp.entrySet()) {
 			 
 		    System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-		    res+=entry.getKey()+" "+entry.getValue();
+		    res+=entry.getKey()+" "+entry.getValue()+" ";
 		}
 	
 		//this.sendData(res);
@@ -480,6 +508,8 @@ public class Server extends AdditionPOA{
 				res+=" "+ts;
 			}
 		}
+		
+		
 		System.out.println(res);
         String tempWrite=managerID+" has listed "+eventType+" of "+location+"Server";
         try {
@@ -512,20 +542,11 @@ public class Server extends AdditionPOA{
 	public void requestData(String eventType) throws AccessException, RemoteException, NotBoundException {
 		
 	  
-	    
-		//System.out.println("targetStub1 "+targetStub1);
-		//Registry registry1 = LocateRegistry.getRegistry(targetPort1);    
-		//Registry registry2 = LocateRegistry.getRegistry(targetPort2);
+	    this.sendRequest(eventType, requestPort1);
+	    this.sendRequest(eventType, requestPort2);
+	    this.sendRequest(eventType, requestPort1);
+	    this.sendRequest(eventType, requestPort2);
 
-		//ServerOperation stub1 = (ServerOperation) registry1.lookup(targetStub1);
-		//ServerOperation stub2 = (ServerOperation) registry2.lookup(targetStub2);
-	    this.sendRequest(eventType, requestPort1);
-	    this.sendRequest(eventType, requestPort2);
-	    this.sendRequest(eventType, requestPort1);
-	    this.sendRequest(eventType, requestPort2);
-		//stub1.sendData(eventType, receivePort1);
-		//stub2.sendData(eventType, receivePort2);
-		//stub2.sendData(eventType, listenPort1);
 		
 	}
 	
@@ -579,6 +600,37 @@ public class Server extends AdditionPOA{
 	            e.printStackTrace();
 	        }finally {if(aSocket != null) aSocket.close();}
 	}
+	
+	
+    public void sendSchedule(String schedule,int targetPort) throws RemoteException {
+    	//StringBuffer bf=new StringBuffer();
+    	//LinkedList<String> data=this.thisEventList(eventType);
+    	
+    	//bf.append("this is from"+location);
+    	//for(String s:data) {
+    	//	bf.append(s+".");
+    	//}
+    	
+    	try {
+			aSocket = new DatagramSocket();
+			
+			byte[] sData=schedule.toString().getBytes();
+			
+			InetAddress address = InetAddress.getByName("localhost");
+			//int port=8088;
+			DatagramPacket sendPacket=new DatagramPacket(sData,sData.length,address,targetPort);
+			//DatagramPacket sendPacket2=new DatagramPacket(sData,sData.length,address,targetPort2);
+			aSocket.send(sendPacket);
+			//aSocket.send(sendPacket2);
+			//System.out.println("message is from"+location);
+			//System.out.println(bf.toString());
+			aSocket.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}finally {if(aSocket != null) aSocket.close();}
+    	
+    }
+	
 	
 	
     public void sendData(String eventType,int targetPort) throws RemoteException {
@@ -646,6 +698,43 @@ public class Server extends AdditionPOA{
     	
     	
     }
+    
+    public void receiveSchedule() {
+    	try {
+    		  //int receivePort=port+5000;
+    		  aSocket1 = new DatagramSocket(receivePort1);
+    		  aSocket2 = new DatagramSocket(receivePort2);
+			  byte[] data1= new byte[2000];
+			  byte[] data2= new byte[2000];
+		      DatagramPacket recevPacket1 = new DatagramPacket(data1,data1.length);
+		      DatagramPacket recevPacket2 = new DatagramPacket(data2,data2.length);
+			  aSocket1.receive(recevPacket1);
+			  aSocket2.receive(recevPacket2);
+			  
+			  byte[] d1=recevPacket1.getData();
+			  int dlen1 = recevPacket1.getLength();
+			  recSchedule1 = new String(d1,0,dlen1,"UTF-8");
+			 // receiveList1=info1.split("\\.");
+		
+			  
+			  byte[] d2=recevPacket2.getData();
+			  int dlen2 = recevPacket2.getLength();
+			  recSchedule2 = new String(d2,0,dlen2,"UTF-8");
+			//  receiveList2=info2.split("\\.");
+			   System.out.println("message is "+recSchedule1);
+			   System.out.println("message is "+recSchedule2);
+			   aSocket1.close();
+			   aSocket2.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}finally {
+			if(aSocket1 != null) aSocket1.close();
+			if(aSocket2 != null) aSocket2.close();
+		}
+    	
+    	
+    }
+    
     
     public void sendBack(int back) {
     	
@@ -798,7 +887,7 @@ public class Server extends AdditionPOA{
 				
 
 			if(feedback==1) {
-				this.insertEvent(customerID, eventID, eventType);
+			//	this.insertEvent(customerID, eventID, eventType);
 			}
 			System.out.println("feedback value "+feedback);
 			return feedback;
@@ -876,7 +965,7 @@ public class Server extends AdditionPOA{
 
 	public void insertEvent(String customerID,String eventID,String  eventType) {
 		
-		if(customerID.substring(0, 3).equals(location)) {
+		//if(customerID.substring(0, 3).equals(location)) {
 			if(userSchedule.containsKey(customerID)) {
 				userSchedule.get(customerID).add(eventType+" "+eventID);
 				
@@ -886,7 +975,7 @@ public class Server extends AdditionPOA{
 				userSchedule.put(customerID, usTemp);
 			}
 			
-		}
+		//}
 
 	}
 	
@@ -1093,6 +1182,40 @@ public class Server extends AdditionPOA{
 		    
 		  }
 	
+	private void sendGetSchedule(String customerID,int requestPort,String flag) {
+	      
+	     System.out.println("GetSchedule:");
+
+	           
+	           try {
+	               aSocket = new DatagramSocket();	               
+	               String cancelInfo="schedule-"+customerID+"-"+listenPort2+"-"+flag;
+	               byte[] sData=cancelInfo.getBytes();	               
+	              // System.out.println("send:"+GetSchedule);
+	               InetAddress address = InetAddress.getByName("localhost");	          
+	               DatagramPacket sendPacket=new DatagramPacket(sData,sData.length,address,requestPort);
+	               aSocket.send(sendPacket);
+
+	               aSocket.close();
+	           } catch (Exception e) {         
+	               e.printStackTrace();
+	           }finally {if(aSocket != null) aSocket.close();}
+	    
+	  }
+
+	public String getSchedule(String customerID) {
+		String res="";
+		if(userSchedule.containsKey(customerID)) {
+			for(String o: userSchedule.get(customerID)) {
+				res+=" "+o;
+			}
+		}
+
+	
+		 return res;
+	}
+	
+	
 	@Override
 	public String getBookingSchedule(String customerID) {
 	    String tempWrite=customerID+" get the schedule ";
@@ -1102,17 +1225,46 @@ public class Server extends AdditionPOA{
 	  
 	     e.printStackTrace();
 	   }
-			if(!userSchedule.containsKey(customerID)) {
+	    
+	    sendGetSchedule(customerID,requestPort1,"1");
+	    sendGetSchedule(customerID,requestPort2,"1");
+	    sendGetSchedule(customerID,requestPort1,"2");
+	    sendGetSchedule(customerID,requestPort2,"2");
+	    
+	    String res="    Schedule:";
+	    
+		this.receiveSchedule();
+		
+		//String[] receiveList1;
+		
+		if(recSchedule1.length()>0) {
+			
+				res+=" "+recSchedule1;
+			
+		}
+
+		if(recSchedule2.length()>0) {
+		
+				res+=" "+recSchedule2;
+			
+		}
+
+		
+		System.out.println("res:"+res+res.length());
+		
+			if(!userSchedule.containsKey(customerID)&&res.length()<=13) {
 				String sc="    No schedule";
 				return sc;
 			}
 			
 			else {
-				String res="Schedule:";
-				for(String o: userSchedule.get(customerID)) {
-					res+=o;
+				if(userSchedule.containsKey(customerID)){
+					for(String o: userSchedule.get(customerID)) {
+						res+=" "+o;
+					}
+				
 				}
-			
+
 				 return res;
 				
 			}
